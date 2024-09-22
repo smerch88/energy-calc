@@ -71,7 +71,14 @@ export function EnergyCalculatorComponent() {
             parseFloat(updatedInputs.nightRateFactor)
         );
 
-        setResult(result);
+        // Compare the two options
+        const boilerTotalCost = result.totalCostInUAH; // Total cost of using boiler
+        const networkHotWaterCost = result.networkHotWaterCostInUAH; // Total cost of hot water from the network
+
+        const moreProfitable =
+            boilerTotalCost < networkHotWaterCost ? 'Бойлер' : 'Гаряча вода з мережі';
+
+        setResult({ ...result, moreProfitable });
     };
 
     const handleSubmit = e => {
@@ -80,7 +87,7 @@ export function EnergyCalculatorComponent() {
     };
 
     return (
-        <Card className="w-full max-w-2xl mx-auto">
+        <Card className="w-full max-w-2xl mx-auto mt-8 mb-8">
             <CardHeader>
                 <CardTitle>Бойлер VS Гаряча вода з крану</CardTitle>
             </CardHeader>
@@ -117,14 +124,15 @@ export function EnergyCalculatorComponent() {
             </CardContent>
             <CardFooter className="flex flex-col items-center space-y-4">
                 <Button type="submit" onClick={handleSubmit}>
-                    Calculate
+                    Розрахувати
                 </Button>
                 {result && (
                     <div className="mt-4 p-4 bg-gray-100 rounded-md w-full">
-                        <h3 className="font-semibold mb-2">Result:</h3>
-                        <p>{`Energy Consumption: ${result.energyConsumption.toFixed(2)} kWh`}</p>
-                        <p>{`Total Cost: ${result.totalCostInUAH.toFixed(2)} UAH`}</p>
-                        <p>{`Network Hot Water Cost: ${result.networkHotWaterCostInUAH.toFixed(2)} UAH`}</p>
+                        <h3 className="font-semibold mb-2">Результат:</h3>
+                        <p>{`Споживання електроенергії бойлером: ${result.energyConsumption.toFixed(2)} kWh`}</p>
+                        <p>{`Загальна вартість: ${result.totalCostInUAH.toFixed(2)} UAH`}</p>
+                        <p>{`Вартість гарячої води з мережі: ${result.networkHotWaterCostInUAH.toFixed(2)} UAH`}</p>
+                        <p className="font-semibold">{`Більш вигідно: ${result.moreProfitable}!`}</p>
                     </div>
                 )}
             </CardFooter>
